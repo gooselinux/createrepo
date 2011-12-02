@@ -1,0 +1,43 @@
+commit c3b157d0ccc2a4c8971c64ec6f9fb4ea3a9c17c5
+Author: Dennis Gregorovic <dgregor@redhat.com>
+Date:   Thu Jan 7 00:11:14 2010 -0500
+
+    Convert stat mtime to int so comparison can work, --update, BZ 553030
+
+diff --git a/createrepo/readMetadata.py b/createrepo/readMetadata.py
+index 285e54d..6a5055e 100644
+--- a/createrepo/readMetadata.py
++++ b/createrepo/readMetadata.py
+@@ -132,7 +132,7 @@ class MetadataIndex(object):
+                 #ignore non files
+                 return
+             #check size and mtime
+-            if st.st_size != size:
++            if int(st.st_size) != size:
+                 if self.opts.get('verbose'):
+                     print _("Size (%i -> %i) changed for file %s") % (size,st.st_size,filepath)
+                 return
+commit 0bf9a7f48786810515d4b530b91cb2bbd01a391c
+Author: Dennis Gregorovic <dgregor@redhat.com>
+Date:   Thu Jan 7 11:50:37 2010 -0500
+
+    Fixed, convert stat mtime to int so comparison can work, --update, BZ 553030
+
+diff --git a/createrepo/readMetadata.py b/createrepo/readMetadata.py
+index 6a5055e..6711d30 100644
+--- a/createrepo/readMetadata.py
++++ b/createrepo/readMetadata.py
+@@ -132,11 +132,11 @@ class MetadataIndex(object):
+                 #ignore non files
+                 return
+             #check size and mtime
+-            if int(st.st_size) != size:
++            if st.st_size != size:
+                 if self.opts.get('verbose'):
+                     print _("Size (%i -> %i) changed for file %s") % (size,st.st_size,filepath)
+                 return
+-            if st.st_mtime != mtime:
++            if int(st.st_mtime) != mtime:
+                 if self.opts.get('verbose'):
+                     print _("Modification time changed for %s") % filepath
+                 return

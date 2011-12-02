@@ -1,0 +1,28 @@
+commit 044f521cadd42df029cfd75070defe699fe7f432
+Author: Dennis Gregorovic <dgregor@redhat.com>
+Date:   Wed Jan 6 15:26:58 2010 -0500
+
+    Change baseurl of "old" packages on update, when baseurl specified
+
+diff --git a/createrepo/__init__.py b/createrepo/__init__.py
+index 77a03ee..0ffe6cb 100644
+--- a/createrepo/__init__.py
++++ b/createrepo/__init__.py
+@@ -543,6 +543,17 @@ class MetaDataGenerator:
+                                       (othernode, self.otherfile)):
+                     if node is None:
+                         break
++
++                    if self.conf.baseurl:
++                        anode = node.children
++                        while anode is not None:
++                            if anode.type != "element":
++                                anode = anode.next
++                                continue
++                            if anode.name == "location":
++                                anode.setProp('xml:base', self.conf.baseurl)
++                            anode = anode.next
++
+                     output = node.serialize('UTF-8', self.conf.pretty)
+                     if output:
+                         outfile.write(output)
